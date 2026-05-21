@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EUNACOM · Diabetes</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f4f0;
+  --surface: #ffffff;
+  --surface2: #f0efe9;
+  --text: #1a1a18;
+  --text2: #5a5a55;
+  --text3: #9a9990;
+  --border: #e0dfd8;
+  --accent: #2d4a8a;
+  --accent2: #1a7a5e;
+  --accent3: #b84c1e;
+  --accent4: #7a4a9e;
+  --yellow: #e8a020;
+  --radius: 10px;
+  --radius-sm: 6px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+.page-wrap {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 4rem;
+}
+/* HEADER */
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1.5px solid var(--border);
+}
+.header-left h1 {
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  line-height: 1.1;
+}
+.header-left p {
+  font-size: 12px;
+  color: var(--text3);
+  font-family: 'DM Mono', monospace;
+  margin-top: 4px;
+  letter-spacing: 0.04em;
+}
+.header-badge {
+  background: var(--accent);
+  color: #fff;
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  font-weight: 500;
+  padding: 5px 12px;
+  border-radius: 20px;
+  letter-spacing: 0.06em;
+}
+
+/* TABS */
+.tabs-nav {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin-bottom: 1.75rem;
+}
+.tab-btn {
+  padding: 7px 16px;
+  border-radius: 20px;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text2);
+  transition: all 0.18s;
+  font-family: 'DM Sans', sans-serif;
+}
+.tab-btn:hover { background: var(--surface2); color: var(--text); }
+.tab-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/* SECTIONS */
+.section { display: none; }
+.section.active { display: block; animation: fadeIn 0.2s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+/* GRID */
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+.grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+.full { grid-column: 1 / -1; }
+@media (max-width: 600px) {
+  .grid2, .grid3 { grid-template-columns: 1fr; }
+}
+
+/* CARD */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.125rem;
+  margin-bottom: 0;
+}
+.card + .card { margin-top: 12px; }
+.card-title {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+  font-family: 'DM Mono', monospace;
+}
+
+/* ROW */
+.row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.row:last-child { border-bottom: none; }
+.rl { color: var(--text2); min-width: 110px; flex-shrink: 0; font-size: 12.5px; }
+.rv { color: var(--text); font-weight: 500; }
+
+/* ALERTS */
+.alert {
+  padding: 9px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 12.5px;
+  margin: 8px 0;
+  line-height: 1.5;
+}
+.a-blue  { background: #eef3fc; color: #1e3a7a; border-left: 3px solid #2d4a8a; }
+.a-green { background: #eaf5ef; color: #145a3e; border-left: 3px solid #1a7a5e; }
+.a-amber { background: #fef4e6; color: #7a4a0a; border-left: 3px solid #e8a020; }
+.a-red   { background: #faeaea; color: #7a2020; border-left: 3px solid #c0392b; }
+.a-purple{ background: #f3eef8; color: #4a2a7a; border-left: 3px solid #7a4a9e; }
+
+/* CHIPS */
+.chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
+.chip {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+.ch-blue   { background: #eef3fc; color: #1e3a7a; }
+.ch-green  { background: #eaf5ef; color: #145a3e; }
+.ch-amber  { background: #fef4e6; color: #7a4a0a; }
+.ch-red    { background: #faeaea; color: #7a2020; }
+.ch-purple { background: #f3eef8; color: #4a2a7a; }
+.ch-gray   { background: #f0efe9; color: #555550; }
+.ch-teal   { background: #e4f4f1; color: #0f5a48; }
+
+/* STEPS */
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.step:last-child { border-bottom: none; }
+.step-n {
+  min-width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  font-family: 'DM Mono', monospace;
+}
+.step-t { color: var(--text); line-height: 1.5; }
+
+/* TABLE */
+.tbl { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.tbl th {
+  background: var(--surface2);
+  color: var(--text2);
+  font-weight: 600;
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  text-align: left;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.tbl td {
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+.tbl tr:nth-child(even) td { background: var(--surface2); }
+
+/* SECTION LABEL */
+.sec-label {
+  font-size: 10px;
+  font-family: 'DM Mono', monospace;
+  font-weight: 500;
+  color: var(--text3);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+/* CRITERIA BOX */
+.crit-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+}
+.crit-num {
+  min-width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--surface2);
+  color: var(--text2);
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.crit-val { color: var(--text); font-weight: 500; }
+
+/* BADGE */
+.bdg {
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 10px;
+  display: inline-block;
+  margin-left: 5px;
+  vertical-align: middle;
+}
+.bdg-red { background: #faeaea; color: #7a2020; }
+.bdg-blue { background: #eef3fc; color: #1e3a7a; }
+.bdg-green { background: #eaf5ef; color: #145a3e; }
+
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <div class="header">
+    <div class="header-left">
+      <h1>Diabetes</h1>
+      <p>EUNACOM · RESUMEN COMPLETO · 8 SECCIONES</p>
+    </div>
+    <div class="header-badge">MEDICINA</div>
+  </div>
+
+  <div class="tabs-nav">
+    <button class="tab-btn active" onclick="show('dx')">Diagnóstico</button>
+    <button class="tab-btn" onclick="show('hgo')">HGO</button>
+    <button class="tab-btn" onclick="show('insulina')">Insulinoterapia</button>
+    <button class="tab-btn" onclick="show('tto')">Tto DM2</button>
+    <button class="tab-btn" onclick="show('complic')">Complicaciones</button>
+    <button class="tab-btn" onclick="show('cad')">CAD / SHH</button>
+    <button class="tab-btn" onclick="show('hipo')">Hipoglicemia</button>
+    <button class="tab-btn" onclick="show('disli')">Dislipidemia</button>
+  </div>
+
+  <!-- ─────────── 1. DIAGNÓSTICO ─────────── -->
+  <div id="dx" class="section active">
+    <p class="sec-label">01 — Diagnóstico y clasificación</p>
+    <div class="grid2">
+      <div class="card">
+        <p class="card-title">Tipos de diabetes</p>
+        <div class="row"><span class="rl">DM1</span><span class="rv">Autoinmune · niños</span></div>
+        <div class="row"><span class="rl">DM2</span><span class="rv">Resistencia insulina · obesidad</span></div>
+        <div class="row"><span class="rl">LADA</span><span class="rv">Autoinmune adultos · agresiva</span></div>
+        <div class="row"><span class="rl">MODY</span><span class="rv">Genética AD · &lt;25 a · responde HGO</span></div>
+        <div class="row"><span class="rl">Gestacional</span><span class="rv">Hormonas contrarregulación</span></div>
+        <div class="row"><span class="rl">Otros</span><span class="rv">Corticoides · Daño pancreático · Cushing · HiperT4 · Acromegalia</span></div>
+      </div>
+      <div class="card">
+        <p class="card-title">Criterios diagnósticos (NO definen el tipo)</p>
+        <div class="crit-box"><div class="crit-num">I</div><div class="crit-val">Glicemia ayunas <strong>≥ 126</strong> × 2</div></div>
+        <div class="crit-box"><div class="crit-num">II</div><div class="crit-val">PTGO 75 g <strong>≥ 200</strong> (2 hrs)</div></div>
+        <div class="crit-box"><div class="crit-num">III</div><div class="crit-val">Glicemia <strong>≥ 200 + síntomas</strong> (PPP + baja peso)</div></div>
+        <div class="crit-box"><div class="crit-num">IV</div><div class="crit-val"><strong>HbA1c &gt; 6,5%</strong></div></div>
+        <div class="alert a-amber">⚠ Con infección activa → <strong>solo sirve HbA1c</strong></div>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <p class="card-title">Prediabetes</p>
+        <div class="row"><span class="rl">GAA</span><span class="rv">Glicemia ayunas 100–125</span></div>
+        <div class="row"><span class="rl">IGO</span><span class="rv">PTGO 140–199</span></div>
+        <div class="row"><span class="rl">HOMA &gt; 2,6</span><span class="rv">Resistencia a la insulina</span></div>
+      </div>
+      <div class="card">
+        <p class="card-title">Exámenes de estudio</p>
+        <div class="row"><span class="rl">Péptido C alto</span><span class="rv">DM2 / MODY / todas las RI</span></div>
+        <div class="row"><span class="rl">Péptido C bajo</span><span class="rv">DM1 / LADA / pancreáticas</span></div>
+        <div class="row"><span class="rl">Anticuerpos</span><span class="rv">GAD / IAA / IA2 / ZTB (autoinmune)</span></div>
+        <div class="row"><span class="rl">Estudio genético</span><span class="rv">MODY</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <p class="card-title">DM1 vs DM2</p>
+      <table class="tbl">
+        <tr><th>Característica</th><th>DM1</th><th>DM2</th></tr>
+        <tr><td>Edad</td><td>Joven / niños</td><td>Mayor / adulto</td></tr>
+        <tr><td>Peso</td><td>Normal</td><td>Sobrepeso / obeso</td></tr>
+        <tr><td>Severidad / debut</td><td>Rápido / CAD</td><td>Lento / insidioso</td></tr>
+        <tr><td>Responde HGO</td><td>No</td><td>Sí</td></tr>
+        <tr><td>Péptido C</td><td>Bajo</td><td>Alto</td></tr>
+        <tr><td>Anticuerpos</td><td>Positivo (GAD, IA2…)</td><td>Negativo</td></tr>
+      </table>
+    </div>
+    <div class="card" style="margin-top:12px">
+      <p class="card-title">Diabetes en el embarazo</p>
+      <div class="grid2">
+        <div>
+          <div class="alert a-blue" style="margin-bottom:0"><strong>DM Gestacional</strong><br>
+            Glic. ayunas ≥100 × 2 · PTGO ≥100 basal o ≥140 (2h) · Glic ≥200 + síntomas
+          </div>
+        </div>
+        <div>
+          <div class="alert a-purple" style="margin-bottom:0"><strong>DM Pregestacional</strong><br>
+            Diagnóstico previo O &lt;12 sem + criterios generales (≥126 × 2 o ≥200 + síntomas)
+          </div>
+        </div>
+      </div>
+      <div class="alert a-amber" style="margin-top:8px">Screening: 24–28 sem universal · Con factores de riesgo desde 1ra visita</div>
+    </div>
+  </div>
+
+  <!-- ─────────── 2. HGO ─────────── -->
+  <div id="hgo" class="section">
+    <p class="sec-label">02 — Hipoglicemiantes orales</p>
+    <div class="card" style="margin-bottom:12px">
+      <p class="card-title">Primera línea — siempre</p>
+      <div class="alert a-green">
+        <strong>Metformina (MTF)</strong> — segura, barata, sin riesgo de hipoglicemia. Dosis máxima 2–3 g/día.<br>
+        RAM: diarrea, síntomas GI · <strong>Contraindicada</strong>: ERC (Cr &gt;1,5 o TFG &lt;30) e ICC
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <p class="card-title">2da línea — con recursos</p>
+        <div class="row"><span class="rl">iDPP4</span><span class="rv">Sitagliptina 100 mg/día · sin hipo</span></div>
+        <div class="row"><span class="rl">GLP-1</span><span class="rv">Liraglutide · Semaglutide · sin hipo</span></div>
+        <div class="row"><span class="rl">iSGLT2</span><span class="rv">Empagliflozina · Dapagliflozina · glucosuria</span></div>
+      </div>
+      <div class="card">
+        <p class="card-title">2da línea — sin recursos</p>
+        <div class="row"><span class="rl">Glibenclamida</span><span class="rv">Máx 20 mg/día · eficaz · barata</span></div>
+        <div class="alert a-red" style="margin-top:8px">RAM: hipoglicemia + alza de peso<br>NO usar en &gt;75 años ni hipoglicemia frecuente</div>
+      </div>
+    </div>
+    <div class="grid3">
+      <div class="card">
+        <p class="card-title">ERC + albuminuria</p>
+        <div class="chips">
+          <span class="chip ch-teal">GLP-1</span>
+          <span class="chip ch-teal">iSGLT2</span>
+          <span class="chip ch-teal">Insulina</span>
+        </div>
+      </div>
+      <div class="card">
+        <p class="card-title">IAM previo / Ateroesclerosis</p>
+        <div class="chips">
+          <span class="chip ch-blue">GLP-1</span>
+          <span class="chip ch-blue">iSGLT2</span>
+        </div>
+      </div>
+      <div class="card">
+        <p class="card-title">ICC</p>
+        <div class="chips">
+          <span class="chip ch-purple">iSGLT2</span>
+        </div>
+        <div style="font-size:12px;color:var(--text2);margin-top:6px">Evitar glitazonas (TZD)</div>
+      </div>
+    </div>
+    <div class="card">
+      <p class="card-title">Resumen de fármacos</p>
+      <table class="tbl">
+        <tr><th>Familia</th><th>Fármaco</th><th>Hipo</th><th>Nota clave</th></tr>
+        <tr><td>Biguanidas</td><td>Metformina</td><td>No</td><td>1era línea universal</td></tr>
+        <tr><td>Sulfonilureas</td><td>Glibenclamida</td><td>Sí</td><td>Barata, 2da línea sin $</td></tr>
+        <tr><td>iDPP4</td><td>Sitagliptina</td><td>No</td><td>2da línea con $</td></tr>
+        <tr><td>GLP-1</td><td>Liraglutide / Semaglutide</td><td>No</td><td>Cardio / renal / peso</td></tr>
+        <tr><td>iSGLT2</td><td>Empagliflozina</td><td>No</td><td>Bueno en ICC y ERC</td></tr>
+        <tr><td>Glitazonas</td><td>Pioglitazona</td><td>No</td><td>En desuso, riesgo CV/ICC</td></tr>
+        <tr><td>Meglitinidas</td><td>Repaglinida</td><td>Menor</td><td>Similar a SU pero menos hipo</td></tr>
+        <tr><td>Alfa-glucosidasa</td><td>Acarbosa</td><td>No</td><td>Poco eficaz</td></tr>
+      </table>
+    </div>
+    <div class="alert a-amber" style="margin-top:12px">Al iniciar insulina: <strong>mantener MTF</strong> · suspender el resto de HGO (polifarmacia, peso, $$$)</div>
+  </div>
+
+  <!-- ─────────── 3. INSULINOTERAPIA ─────────── -->
+  <div id="insulina" class="section">
+    <p class="sec-label">03 — Insulinoterapia</p>
+    <div class="grid2">
+      <div class="card">
+        <p class="card-title">Tipos de insulina</p>
+        <div class="row"><span class="rl">Cristalina (regular)</span><span class="rv">Inicio 30 min · peak 1,5–3,5 h · pre-comidas</span></div>
+        <div class="row"><span class="rl">NPH</span><span class="rv">Dura 12 h · peak 4–6 h · mezclable</span></div>
+        <div class="row"><span class="rl">Ultra rápida (Lispro)</span><span class="rv">Inicio 15–30 min · peak 1–3 h · pre o junto comida</span></div>
+        <div class="row"><span class="rl">Ultra lenta</span><span class="rv">Glargina / Detemir / Degludec · 24 h · <strong>sin peak</strong> → menos hipo</span></div>
+      </div>
+      <div class="card">
+        <p class="card-title">Metas de control</p>
+        <div class="row"><span class="rl">HbA1c general</span><span class="rv">&lt; 7%</span></div>
+        <div class="row"><span class="rl">HbA1c laxo</span><span class="rv">&lt; 8% (hipo, niños pequeños, &gt;75 a, vida &lt;10 a, comorbilidades severas)</span></div>
+        <div class="row"><span class="rl">Glicemia preprandial</span><span class="rv">&lt; 130 mg/dL</span></div>
+        <div class="row"><span class="rl">Glicemia postprandial</span><span class="rv">&lt; 180 mg/dL</span></div>
+        <div class="row"><span class="rl">Presión arterial</span><span class="rv">130 / 80 mmHg</span></div>
+        <div class="row"><span class="rl">TGC / HDL</span><span class="rv">&lt;150 · H&gt;40 · M&gt;50</span></div>
+        <div class="row"><span class="rl">Control HbA1c</span><span class="rv">Cada 3 meses (estable → cada 6 m)</span></div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:12px">
+      <p class="card-title">¿Qué insulina dar?</p>
+      <div class="row"><span class="rl">DM1</span><span class="rv">Ultra lenta 1–2 c/día + IC o ultra rápida (esquema basal-bolo)</span></div>
+      <div class="row"><span class="rl">DM hospitalizado</span><span class="rv">IC en bolos con corrección por HGT c/6 h</span></div>
+      <div class="row"><span class="rl">DM1 hospitalizada</span><span class="rv">Insulina basal + IC c/6 h ajustada por HGT</span></div>
+    </div>
+    <div class="card" style="margin-top:12px">
+      <p class="card-title">Indicaciones de insulina</p>
+      <table class="tbl">
+        <tr><th>Situación</th><th>Esquema</th></tr>
+        <tr><td>DM1 / LADA</td><td>Esquema intensificado (basal-bolo)</td></tr>
+        <tr><td>CAD / HGHO</td><td>IC en bolo + goteo</td></tr>
+        <tr><td>DM2: HbA1c &gt;9%</td><td>NPH → IC</td></tr>
+        <tr><td>DM2: 2 HGO dosis máx + HbA1c &gt;7-8%</td><td>NPH nocturna</td></tr>
+        <tr><td>ICC / ERC severa</td><td>NPH</td></tr>
+        <tr><td>Hospitalizado</td><td>IC EV + HGT c/6 h</td></tr>
+        <tr><td>Corticoides / Embarazo / Glic &gt;400</td><td>Insulina</td></tr>
+        <tr><td>Neuropatía dolorosa / amiotrófica</td><td>Considerar insulina</td></tr>
+      </table>
+    </div>
+    <div class="alert a-blue" style="margin-top:12px">
+      <strong>Regla de ajuste:</strong> NPH nocturna → controla glicemia pre-desayuno · NPH diurna → pre-almuerzo y pre-cena · IC / Ultra rápida → glicemias post-prandiales
+    </div>
+  </div>
+
+  <!-- ─────────── 4. TRATAMIENTO DM2 ─────────── -->
+  <div id="tto" class="section">
+    <p class="sec-label">04 — Tratamiento DM2 y embarazo</p>
+    <div class="card" style="margin-bottom:12px">
+      <p class="card-title">Escalada terapéutica DM2</p>
+      <div class="step"><div class="step-n">1</div><div class="step-t">Cambio en el estilo de vida + <strong>Metformina</strong></div></div>
+      <div class="step"><div class="step-n">2</div><div class="step-t">Aumentar metformina hasta máx <strong>2–3 g/día</strong></div></div>
+      <div class="step"><div class="step-n">3</div><div class="step-t">Agregar otro HGO — solo cuando llegue a dosis máxima de MTF</div></div>
+      <div class="step"><div class="step-n">4</div><div class="step-t">Aumentar dosis del segundo HGO</div></div>
+      <div class="step"><div class="step-n">5</div><div class="step-t">Agregar <strong>NPH nocturna</strong></div></div>
+      <div class="step"><div class="step-n">6</div><div class="step-t">Aumentar NPH nocturna / agregar NPH matinal / refuerzos de insulina cristalina — según glicemias de ayuno</div></div>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <p class="card-title">Indicar insulina en DM2</p>
+        <div class="chips">
+          <span class="chip ch-red">HbA1c &gt; 9%</span>
+          <span class="chip ch-red">2 HGO dosis máx + HbA1c &gt;7-8%</span>
+          <span class="chip ch-red">ICC</span>
+          <span class="chip ch-red">ERC (Cr &gt;1,5 o TFG &lt;30)</span>
+          <span class="chip ch-red">Embarazo</span>
+          <span class="chip ch-red">Glicemia &gt;400 o síntomas PPP</span>
+          <span class="chip ch-red">Neuropatía dolorosa / amiotrófica</span>
+        </div>
+      </div>
+      <div class="card">
+        <p class="card-title">Problemas con MTF</p>
+        <div class="row"><span class="rl">Intolerancia</span><span class="rv">Cambiar dosis · forma XR · o cambiar a otro HGO</span></div>
+        <div class="row"><span class="rl">Contraindicada</span><span class="rv">ERC o ICC → GLP-1 / iSGLT2 / Insulina</span></div>
+        <div class="alert a-amber" style="margin-top:8px">Dosis máximas: MTF 2–3 g/d · GBC 20 mg/d · Sitagliptina 100 mg/d</div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:12px">
+      <p class="card-title">Tratamiento DM en embarazo</p>
+      <table class="tbl">
+        <tr><th>Meta</th><th>Valor</th></tr>
+        <tr><td>Glicemia pre-comida</td><td>60–90 mg/dL</td></tr>
+        <tr><td>Glicemia post-comida</td><td>90–120 mg/dL</td></tr>
+        <tr><td>Control HbA1c</td><td>Cada 6–8 sem</td></tr>
+        <tr><td>Monitoreo</td><td>HGT c/4 días + control cada 2 sem</td></tr>
+      </table>
+      <div class="alert a-green" style="margin-top:8px">Escalonado: <strong>1. Dieta → 2. NPH + Insulina Cristalina</strong><br>MTF y GBC son seguros, pero preferir insulina</div>
+      <div class="alert a-blue" style="margin-top:8px">Pre-embarazo: lograr HbA1c &lt;7% + iniciar insulina previo a concebir<br>Parto: HGT seriados + insulina cristalina (riesgo hipo e hiperglicemia)</div>
+      <div class="alert a-amber" style="margin-top:8px">Riesgos DMG: macrosomía (&gt;4,5 kg), hipoglicemia neonatal, hipocalcemia, distocia de hombros, poliglobulia<br>DMPG agrega: malformaciones (DTN), insuficiencia placentaria, preeclampsia<br>Cesárea si &gt;4,5 kg (o &gt;4 kg en DPG) · Interrupción 39–41 sem · Ácido fólico 4 mg/d<br>Puérpera: PTGO 6–12 sem (mayor riesgo DM2)</div>
+    </div>
+  </div>
+
+  <!-- ─────────── 5. COMPLICACIONES ─────────── -->
+  <div id="complic" class="section">
+    <p class="sec-label">05 — Complicaciones crónicas</p>
+    <div class="grid2">
+      <div class="card">
+        <p class="card-title">Nefropatía diabética</p>
+        <div class="row"><span class="rl">Definición</span><span class="rv">DM + albuminuria (inicial) o ERC (establecida)</span></div>
+        <div class="row"><span class="rl">Microalbuminuria</span><span class="rv">30–300 mg/24h</span></div>
+        <div class="row"><span class="rl">Macroalbuminuria</span><span class="rv">&gt;300 mg/24h</span></div>
+        <div class="row"><span class="rl">RAC micro</span><span class="rv">0,03 mg/mg o 30 mg/g</span></div>
+        <div class="row"><span class="rl">Clearence Cr</span><span class="rv">Diagnóstico nefropatía establecida</span></div>
+        <div class="alert a-blue" style="margin-top:8px"><strong>Tto:</strong> 1. Manejo DM · 2. HTA (130/80) · 3. ERC · 4. Proteinuria → IECA / ARA II / Bloq Ca NoDHP (Diltiazem)</div>
+        <div class="alert a-red" style="margin-top:6px">Proteinuria &gt;3g/24h → sospechar síndrome nefrótico → glomerulopatía membranosa → biopsia renal</div>
+      </div>
+      <div class="card">
+        <p class="card-title">Retinopatía diabética</p>
+        <div class="row"><span class="rl">Screening</span><span class="rv">Fondo de ojo anual (alterado → c/3–6 m)</span></div>
+        <div style="margin-top:8px;font-size:12.5px;color:var(--text2);font-weight:600">No proliferativa (asintomática):</div>
+        <div class="row"><span class="rl">Estadios</span><span class="rv">Muerte pericitos → exudados céreos → microaneurismas → microhemorragias → microinfartos</span></div>
+        <div class="row"><span class="rl">Tto</span><span class="rv">Control de la diabetes</span></div>
+        <div style="margin-top:8px;font-size:12.5px;color:var(--text2);font-weight:600">Proliferativa:</div>
+        <div class="row"><span class="rl">Estadio</span><span class="rv">Formación de neovasos</span></div>
+        <div class="row"><span class="rl">Tto</span><span class="rv">Antiangiogénicos IV (Ranibizumab) + Fotocoagulación</span></div>
+        <div class="alert a-amber" style="margin-top:8px"><strong>Edema macular:</strong> ↓ agudeza visual días–sem → exudados céreos en mácula → antiangiogénicos + fotocoag<br><strong>Hemorragia vítrea:</strong> amaurosis súbita + pérdida rojo pupilar → observar / vitrectomía</div>
+      </div>
+    </div>
+    <div class="grid2" style="margin-top:12px">
+      <div class="card">
+        <p class="card-title">Pie diabético (Wagner)</p>
+        <div class="row"><span class="rl">W0</span><span class="rv">Sin úlcera (solo factores de riesgo)</span></div>
+        <div class="row"><span class="rl">W1</span><span class="rv">Úlcera solo en piel</span></div>
+        <div class="row"><span class="rl">W2 <span class="bdg bdg-red">Debridar</span></span><span class="rv">Afecta tendón y músculo</span></div>
+        <div class="row"><span class="rl">W3 <span class="bdg bdg-red">Amputar</span></span><span class="rv">Abscesos / llega al hueso (osteomielitis)</span></div>
+        <div class="row"><span class="rl">W4 <span class="bdg bdg-red">Amputar</span></span><span class="rv">Gangrena localizada</span></div>
+        <div class="row"><span class="rl">W5 <span class="bdg bdg-red">Amputar</span></span><span class="rv">Gangrena extensa</span></div>
+        <div class="alert a-blue" style="margin-top:8px">ATB solo si infectada (polimicrobiano) · Si no → solo curaciones<br>Debridación química con hidrogel si no hay cirujano disponible<br>Amputar lo mínimo suficiente para defocar · mantener articulación</div>
+        <div class="alert a-green" style="margin-top:6px"><strong>Osteomielitis:</strong> 1. Clínico (palpar hueso) · 2. Radiografía · 3. RM (si no es categórico)</div>
+      </div>
+      <div class="card">
+        <p class="card-title">Neuropatía diabética</p>
+        <div class="row"><span class="rl">Sensitiva</span><span class="rv">↓ termoalgésica y vibratoria · guante y calcetín</span></div>
+        <div class="row"><span class="rl">Dolorosa</span><span class="rv">Dolor urente + alodinia + hiperalgesia</span></div>
+        <div class="row"><span class="rl">Amiotrófica</span><span class="rv">Atrofia muscular distal y proximal</span></div>
+        <div class="row"><span class="rl">Atrapamiento</span><span class="rv">Túnel carpiano (asociado a DM) · cubital</span></div>
+        <div class="row"><span class="rl">Craneal</span><span class="rv">3er par: ojo lateral + midriasis + ptosis</span></div>
+        <div class="row"><span class="rl">Dx</span><span class="rv">Clínico · si duda → electromiografía</span></div>
+        <div class="alert a-purple" style="margin-top:8px"><strong>Tto dolor:</strong> Venlafaxina · Duloxetina · Gabapentina · Pregabalina · ATC dosis bajas<br>Neuropatía dolorosa/amiotrófica → considerar insulina<br>Atrapamiento → quirúrgico + KNT</div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:12px">
+      <p class="card-title">Manejo HTA en diabetes</p>
+      <table class="tbl">
+        <tr><th>Fármaco</th><th>Efecto</th><th>Indicación</th></tr>
+        <tr><td>IECA / ARA II</td><td>↓ proteinuria y nefropatía diabética</td><td><span class="chip ch-green">1era línea</span></td></tr>
+        <tr><td>Diltiazem (NoDHP)</td><td>↓ proteinuria</td><td><span class="chip ch-green">Agregar si necesario</span></td></tr>
+        <tr><td>Tiazidas</td><td>↑ resistencia a la insulina</td><td><span class="chip ch-amber">Con cautela</span></td></tr>
+        <tr><td>Betabloqueadores</td><td>Ocultan síntomas de hipoglicemia</td><td><span class="chip ch-amber">Poco deseable en DM</span></td></tr>
+        <tr><td>Amlodipino (DHP)</td><td>Neutro</td><td><span class="chip ch-gray">Sin preferencia</span></td></tr>
+      </table>
+      <div class="alert a-green" style="margin-top:8px">Conclusión: <strong>IECA / ARA II</strong> de elección. Si se requiere agregar → <strong>Diltiazem</strong>. Meta PA 130/80 mmHg.</div>
+    </div>
+  </div>
+
+  <!-- ─────────── 6. CAD / SHH ─────────── -->
+  <div id="cad" class="section">
+    <p class="sec-label">06 — Cetoacidosis diabética y síndrome hiperosmolar</p>
+    <div class="grid2">
+      <div class="card">
+        <p class="card-title">CAD <span class="bdg bdg-blue">Principalmente DM1</span></p>
+        <div class="chips" style="margin-bottom:10px">
+          <span class="chip ch-blue">Náuseas / vómitos</span>
+          <span class="chip ch-blue">Dolor abdominal (abd. agudo metabólico)</span>
+          <span class="chip ch-blue">Aliento cetónico</span>
+          <span class="chip ch-blue">Respiración de Kussmaul</span>
+          <span class="chip ch-blue">Alteración conciencia</span>
+          <span class="chip ch-blue">Deshidratación</span>
+        </div>
+        <div class="row"><span class="rl">CETO</span><span class="rv">Cuerpos cetónicos en sangre u orina (Acetoacetato / Hidroxibutirato)</span></div>
+        <div class="row"><span class="rl">ACIDOSIS</span><span class="rv">pH ≤ 7,3 · HCO₃ &lt;15 · AG &gt;12</span></div>
+        <div class="row"><span class="rl">DIABÉTICA</span><span class="rv">Glicemia &gt; 250 (puede ser &gt;200)</span></div>
+      </div>
+      <div class="card">
+        <p class="card-title">SHH <span class="bdg bdg-blue">Principalmente DM2</span></p>
+        <div class="chips" style="margin-bottom:10px">
+          <span class="chip ch-red">Confusión o coma</span>
+          <span class="chip ch-red">Signos neurológicos focales (hemiparesia)</span>
+          <span class="chip ch-red">Deshidratación severa</span>
+          <span class="chip ch-red">Hipotensión / taquicardia</span>
+        </div>
+        <div class="row"><span class="rl">HIPERGLICEMIA</span><span class="rv">Glicemia &gt; 600</span></div>
+        <div class="row"><span class="rl">HIPEROSMOLAR</span><span class="rv">Osm plasmática efectiva &gt; 320<br><small style="font-family:'DM Mono',monospace;color:var(--text3)">2·Na + glicemia/18 (sin BUN)</small></span></div>
+        <div class="alert a-amber" style="margin-top:8px">Existen cuadros mixtos. Siempre buscar y tratar la CAUSA (no confundir con consecuencia)</div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:12px">
+      <p class="card-title">Tratamiento CAD y SHH (ambos tratamientos casi iguales)</p>
+      <div class="step"><div class="step-n">1</div><div class="step-t"><strong>SF abundante y rápido</strong> · Bolos EV 1L o 20 cc/kg hasta recuperar hemodinamia · Luego 20 cc/kg/h</div></div>
+      <div class="step"><div class="step-n">2</div><div class="step-t"><strong>Insulina cristalina</strong> 0,1 U/kg en bolo + goteo cada hora ajustable</div></div>
+      <div class="step"><div class="step-n">3</div><div class="step-t"><strong>Potasio</strong> (rango normal 3,3–5,3): Alto → no dar K⁺ · Normal → 1–2 g KCl en goteo · Bajo → 2–3 g KCl en goteo (⚠ NO dar IC si K bajo)</div></div>
+      <div class="step"><div class="step-n">4</div><div class="step-t"><strong>HCO₃</strong> solo si pH &lt;6,9 → matraz 2/3M (150–160 mEq) → 250 cc en goteo</div></div>
+      <div class="step"><div class="step-n">5</div><div class="step-t"><strong>Tratar la causa:</strong> infecciones · debut · mal tratamiento · IAM · AVE</div></div>
+    </div>
+    <div class="grid2" style="margin-top:12px">
+      <div class="alert a-amber" style="margin:0">Glicemia no baja ≥50 mg/h → <strong>duplicar dosis IC</strong><br>Glicemia &lt;200 → cambiar SF por <strong>suero glucosalino</strong></div>
+      <div class="alert a-blue" style="margin:0"><strong>Exámenes c/2 h:</strong> ELP · GSV · Glicemia · BUN<br>Buscar causa: Hemograma · PCR · ECG · imágenes si sospecha ACV</div>
+    </div>
+    <div class="card" style="margin-top:12px">
+      <p class="card-title">Alteraciones del sodio en CAD</p>
+      <div class="row"><span class="rl">Sodio alto</span><span class="rv">Primero asegurar volemia con SF → luego NaCl 0,45%</span></div>
+      <div class="row"><span class="rl">Sodio bajo</span><span class="rv">Suero fisiológico</span></div>
+    </div>
+  </div>
+
+  <!-- ─────────── 7. HIPOGLICEMIA ─────────── -->
+  <div id="hipo" class="section">
+    <p class="sec-label">07 — Hipoglicemias</p>
+    <div class="grid2">
+      <div class="card">
+        <p class="card-title">Clínica</p>
+        <div style="font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px">Síntomas simpaticomméticos (leves — iniciales):</div>
+        <div class="chips" style="margin-bottom:10px">
+          <span class="chip ch-amber">Taquicardia</span>
+          <span class="chip ch-amber">Temblor</span>
+          <span class="chip ch-amber">Sudoración</span>
+          <span class="chip ch-amber">Inquietud</span>
+        </div>
+        <div class="alert a-amber" style="margin-bottom:10px">Se ocultan con betabloqueadores → poco deseable en DM</div>
+        <div style="font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px">Síntomas neuroglucopénicos (severos — definen severidad):</div>
+        <div class="chips">
+          <span class="chip ch-red">Convulsiones</span>
+          <span class="chip ch-red">Desorientación</span>
+          <span class="chip ch-red">Agitación</span>
+          <span class="chip ch-red">Compromiso de conciencia</span>
+        </div>
+      </div>
+      <div class="card">
+        <p class="card-title">Diagnóstico y punto de corte</p>
+        <div class="alert a-blue" style="margin-bottom:10px">
+          <strong>Tríada de Whipple:</strong><br>
+          1. Síntomas sugerentes<br>
+          2. Glicemia baja<br>
+          3. Mejora con el azúcar
+        </div>
+        <div class="row"><span class="rl">Punto de corte</span><span class="rv">No hay consenso · &lt;60 mg/dL (también &lt;55, &lt;50 según paciente)</span></div>
+        <div class="row"><span class="rl">RN &lt;48 h</span><span class="rv">&lt; 40 mg/dL</span></div>
+        <div class="row"><span class="rl">RN &gt;48 h</span><span class="rv">&lt; 50 mg/dL</span></div>
+        <div class="alert a-amber" style="margin-top:8px">Síntomas + glicemia NORMAL → NO es hipoglicemia verdadera (buscar otras causas: hiperT4, feocromocitoma, espectro psiquiátrico)</div>
+      </div>
+    </div>
+    <div class="grid2" style="margin-top:12px">
+      <div class="card">
+        <p class="card-title">Tratamiento</p>
+        <div class="row"><span class="rl">Leve</span><span class="rv">Glucosa vía oral (líquido azucarado, miel, bebida no light, jugo)</span></div>
+        <div class="row"><span class="rl">Severa</span><span class="rv">Glucosa EV <strong>25 g en bolo</strong> (250 cc al 10% o 50 cc al 50%)</span></div>
+        <div class="row"><span class="rl">Alternativa</span><span class="rv">Glucagón SC</span></div>
+        <div class="row"><span class="rl">Sin respuesta</span><span class="rv">Repetir bolos hasta normoglicemia → goteo → luego VO</span></div>
+        <div class="alert a-red" style="margin-top:8px">Hipoglicemia por <strong>GBC</strong>: severa y prolongada → boleo + goteo + HGT frecuentes + hospitalizar</div>
+      </div>
+      <div class="card">
+        <p class="card-title">Clasificación hipoglicemias espontáneas</p>
+        <div class="row"><span class="rl">Reactivas</span><span class="rv">2–4 h después de comer (RI → exceso insulina)</span></div>
+        <div class="row"><span class="rl">De ayuno</span><span class="rv">4–6 h sin comer (tumores: insulinoma, sarcoma, autoinmune)</span></div>
+        <div class="alert a-purple" style="margin-top:8px">Hipoglicemias espontáneas deben estudiarse:<br>
+          Prueba tolerancia comida mixta (reactivas) · Prueba de ayuno · Péptido C + insulina
+        </div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:12px">
+      <p class="card-title">Péptido C e insulina para orientar etiología</p>
+      <table class="tbl">
+        <tr><th>Causa</th><th>Péptido C</th><th>Insulina</th></tr>
+        <tr><td>Insulina exógena</td><td>↓ Bajo</td><td>↑ Alto</td></tr>
+        <tr><td>GBC / Sulfonilurea</td><td>↑ Alto</td><td>↑ Alto</td></tr>
+        <tr><td>Insulinoma</td><td>↑ Alto</td><td>↑ Alto</td></tr>
+        <tr><td>RI reactiva</td><td>↑ ?</td><td>↑ ?</td></tr>
+        <tr><td>Ayuno (Cáncer)</td><td>↓ Bajo</td><td>↓ Bajo</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- ─────────── 8. DISLIPIDEMIA ─────────── -->
+  <div id="disli" class="section">
+    <p class="sec-label">08 — Dislipidemias</p>
+    <div class="card" style="margin-bottom:12px">
+      <p class="card-title">Prioridad de manejo</p>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:6px 0">
+        <span class="chip ch-red" style="font-size:14px;padding:5px 14px">1. Bajar LDL</span>
+        <span style="color:var(--text3);font-size:18px">→</span>
+        <span class="chip ch-amber" style="font-size:14px;padding:5px 14px">2. Bajar TGC</span>
+        <span style="color:var(--text3);font-size:18px">→</span>
+        <span class="chip ch-green" style="font-size:14px;padding:5px 14px">3. Subir HDL</span>
+      </div>
+      <div class="alert a-amber" style="margin-top:8px">Si TGC &gt;500 → partir con <strong>fibratos</strong> por riesgo de pancreatitis</div>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <p class="card-title">Fármacos</p>
+        <div class="row"><span class="rl">LDL alto</span><span class="rv">Estatinas (Atorvastatina / Rosuvastatina)</span></div>
+        <div class="row"><span class="rl">TGC alto</span><span class="rv">Fibratos (Gemfibrozilo / Fenofibrato)</span></div>
+        <div class="row"><span class="rl">HDL bajo</span><span class="rv">Niacina (ácido nicotínico) — sin evidencia clara</span></div>
+        <div class="row"><span class="rl">Alternativa LDL</span><span class="rv">Ezetimibe (contraindicación estatinas o hipercolest. familiar)</span></div>
+        <div class="alert a-red" style="margin-top:8px">Estatinas <strong>NO</strong> con Gemfibrozilo · Estatinas <strong>SÍ</strong> con Fenofibrato (con cuidado)</div>
+      </div>
+      <div class="card">
+        <p class="card-title">Tratamiento no farmacológico (siempre)</p>
+        <div class="row"><span class="rl">LDL alto</span><span class="rv">Dieta baja en grasas saturadas · buscar hipotiroidismo</span></div>
+        <div class="row"><span class="rl">TGC alto</span><span class="rv">Dieta baja en azúcares refinadas · bajo consumo de OH</span></div>
+        <div class="row"><span class="rl">HDL bajo</span><span class="rv">Tratar LDL, TGC y resistencia a la insulina</span></div>
+        <div class="row"><span class="rl">Objetivo HDL</span><span class="rv">Mujeres &gt;50 · Hombres &gt;40</span></div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:12px">
+      <p class="card-title">Score de Framingham → inicio de estatinas</p>
+      <div class="alert a-blue" style="margin-bottom:8px">Variables: Edad · Género · PAS · Colesterol total y HDL · AntiHTA · Tabaquismo · Diabetes</div>
+      <table class="tbl">
+        <tr><th>RCV</th><th>Riesgo IAM 10 años</th><th>¿Estatinas?</th><th>Meta LDL</th></tr>
+        <tr><td><span class="chip ch-red">Alto</span></td><td>&gt; 20%</td><td>Sí</td><td>&lt; 70 mg/dL</td></tr>
+        <tr><td><span class="chip ch-amber">Moderado</span></td><td>10–20%</td><td>Idealmente</td><td>&lt; 100 mg/dL</td></tr>
+        <tr><td><span class="chip ch-green">Bajo</span></td><td>&lt; 10%</td><td>Solo si LDL &gt;190 luego de 3 m de dieta o &gt;160</td><td>Variable</td></tr>
+      </table>
+      <div class="alert a-red" style="margin-top:8px">Riesgo CV mayor (IAM previo · EC · AAA · claudicación · carotídea · <strong>DM</strong>) → <strong>Estatinas + Aspirina</strong> · Meta LDL &lt;70</div>
+    </div>
+    <div class="card" style="margin-top:12px">
+      <p class="card-title">Miopatías por estatinas</p>
+      <table class="tbl">
+        <tr><th>Tipo</th><th>Clínica</th><th>Manejo</th></tr>
+        <tr><td>No severa</td><td>Mialgias · debilidad · CK normal o leve ↑</td><td>Buscar TSH / Vit D → suspender y cambiar estatina (Fluva / Prava / Rosuva)</td></tr>
+        <tr><td>Severa</td><td>Rabdomiolisis · mionecrosis · CK muy elevada</td><td>Suspender estatina → Ezetimibe · evaluar interacciones</td></tr>
+      </table>
+      <div class="alert a-amber" style="margin-top:8px">No pedir CK de rutina. Solo si sospecha de miopatía o falla renal. Útil tener CK basal antes de iniciar estatinas.</div>
+    </div>
+    <div class="card" style="margin-top:12px">
+      <p class="card-title">Dislipidemias genéticas</p>
+      <div class="row"><span class="rl">Pista clínica</span><span class="rv">LDL &gt;500 · antecedentes familiares (AD) · xantomas · arco senil &lt;40 años · IAM joven</span></div>
+      <div class="row"><span class="rl">Tipos</span><span class="rv">Hipercolesterolemia familiar · hipertrigliceridemia familiar</span></div>
+      <div class="row"><span class="rl">Dx</span><span class="rv">Perfil lipídico + test genético · pedir perfil a toda la familia</span></div>
+      <div class="row"><span class="rl">Tto</span><span class="rv">Estatinas dosis altas + Ezetimibe (ej. Atorvastatina 80 mg/d + Ezetimibe)</span></div>
+    </div>
+  </div>
+
+</div><!-- end page-wrap -->
+
+<script>
+function show(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const map = { dx:0, hgo:1, insulina:2, tto:3, complic:4, cad:5, hipo:6, disli:7 };
+  document.querySelectorAll('.tab-btn')[map[id]].classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
